@@ -14,7 +14,7 @@ initialString = "Hello, welcome to our Jackie Chan chatbot"
 def gui2():
     layout = [
               [ sg.Multiline(size=(90,20),background_color='black',text_color='white',reroute_stdout=True,reroute_stderr=True,autoscroll = True)],
-              [sg.Input(key='-in-')],
+              [sg.Input(enable_events=True, key='-in-')],
               [sg.Button('Do things'), sg.Button('Exit')]
              ]
     
@@ -29,6 +29,8 @@ def gui2():
         event, values = window.read() 
         if event in (sg.WIN_CLOSED, 'Exit'):
             break
+        if len(values['-in-']) > 480:
+            window.Element('-in-').Update(values['-in-'][:-1])
         if event == 'Do things':
             print(values['-in-'])
             #### Saves input from interface to text file on local machine
