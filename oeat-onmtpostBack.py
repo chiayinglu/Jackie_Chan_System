@@ -1,5 +1,3 @@
-
-from __future__ import print_function
 import json
 import requests
 import sys
@@ -8,44 +6,29 @@ import os
 reque = open("jurrasicoutput.txt", "r")
 reque = reque.read()
 
-#if (sys.version_info > (3, 0)):
-#    pass
-#else:
-#    reload(sys)
-#    sys.setdefaultencoding('utf-8')
 
-#arglength = len(sys.argv)
-
-#if arglength <= 2:
-#    ruleid = str(100)
-#else:
-#    ruleid = sys.argv[2]
-
-#if arglength <= 1:
-#    print('Please enter the string to translate!')
-#    sys.exit(0)
-#else:
-#    req = sys.argv[1]
-#    pass
-
-ip = "127.0.0.1"
+#Host pc ip adress
+ip = "192.168.2.127"
+#Port
 port = "5000"
 url_root = "/translator"
-#print(reque)
+#Saves request adress to url
 url='http://' + ip + ':' + port + url_root + '/translate'
+#Saves the data and the specific model to data (101 means EN-NL)
 data='[{"src": "' + reque +'", "id": ' + "101" +'}]'
-
+#Gets output from Host pc
 output = requests.post(url, data=data.encode('utf-8')).text
 
+#Unpack Json
 myjson = json.loads(output)
 input = myjson[0][0]['src']
 output = myjson[0][0]['tgt']
-
+#Saves Json in Du-EnOutput (NL-EN output)
 with open('Du-EnOutput.txt','r+') as myfile:      
                 data = myfile.read()                                                                                              
                 myfile.seek(0)                                                                                                    
                 myfile.write(output)                                                                                           
                 myfile.truncate()   
 
-print(input)
-print(output)
+
+#print(output)
