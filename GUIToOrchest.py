@@ -9,39 +9,42 @@ import requests
 import json
 import subprocess
 
-initialString = "Hello, welcome to our Jackie Chan chatbot"
 
 def gui2():
+    #Sets up Interface
     layout = [
-              [ sg.Multiline(size=(90,20),background_color='black',text_color='white',reroute_stdout=True,reroute_stderr=True,autoscroll = True)],
-              [sg.Input(key='-in-')],
-              [sg.Button('Do things'), sg.Button('Exit')]
+              [ sg.Multiline(size=(90,20),background_color='black',text_color='white',reroute_stdout=True,reroute_stderr=True,autoscroll = True)], #Output text grid
+              [sg.Input(enable_events=True, key='-in-')], #enables input to be saved in input field
+              [sg.Button('Do things'), sg.Button('Exit')] #start button and exit button
              ]
     
-    window = sg.Window("Thrash fish go brrr", layout, finalize = True)
+    window = sg.Window("Jackie Chan System", layout, finalize = True) #sets up application window
     
-    #window.read()  #I need to press a button before the text will display
-    #window.refresh() #doesn't refresh the output
+    initialString = "Hello, welcome to our Jackie Chan chatbot"
     print(initialString)
-    #window.refresh() #doesn't refresh the output
     
+    #While the interface is running:
     while True:
-        event, values = window.read() 
+        event, values = window.read()
+        #If Exit button is clicked, break the loop and close interface.
         if event in (sg.WIN_CLOSED, 'Exit'):
             break
+        #Maximises amount of characters within input field
+        if len(values['-in-']) > 480:
+            window.Element('-in-').Update(values['-in-'][:-1])
+        #If the start button is pressed (Do things) run this code:
         if event == 'Do things':
-            print(values['-in-'])
-            #### Saves input from interface to text file on local machine
-            input = values["-in-"]                                      
+            #Saves values stored in input field to variable input
+            input = values["-in-"]
+            #Save the input values in the input.txt file
             with open('input.txt','r+') as myfile:      
                 data = myfile.read()                                                                                              
                 myfile.seek(0)                                                                                                    
                 myfile.write(input)                                                                                           
                 myfile.truncate()                                                                                                 
-            #### ####
-            #subprocess.call("Orchest.py", shell= True)
+            print("User: ", input)
+            #Calls the Orchestrator
             exec(open("Orchest.py").read())
-            print("\n You pressed the button")
     window.close() 
 gui2()
 
